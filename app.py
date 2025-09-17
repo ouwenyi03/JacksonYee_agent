@@ -1,17 +1,13 @@
 import streamlit as st
-import dashscope
-from dashscope import Generation
 from bs4 import BeautifulSoup
 import requests
 import time
 import re
 from datetime import datetime
 import json
-from dotenv import load_dotenv
 import os
 
-# 加载环境变量
-load_dotenv()
+
 
 # ======================
 # 配置与初始化
@@ -40,11 +36,9 @@ def init_session_state():
         st.session_state.page_visits += 1
 
 
-# ======================
 # 明星风格分析模块
-# ======================
 def get_celebrity_style():
-    """使用预设数据代替API调用"""
+    """100%本地化风格数据（无需网络请求）"""
     return {
         "language_features": [
             "习惯用'大家好'作为开场",
@@ -54,16 +48,21 @@ def get_celebrity_style():
         "frequent_topics": ["音乐创作", "电影拍摄"],
         "tone": "温暖积极"
     }
-# ======================
-# 对话生成模块
-# ======================
+
+
 def generate_response(user_input, history, style):
-    """简化版回复生成（无API依赖）"""
-    # 这里可以添加简单的规则-based回复
-    if "你好" in user_input:
+    """纯本地规则回复系统（无API依赖）"""
+    # 简单的情感分析和回复规则
+    user_input = user_input.lower()
+
+    if any(word in user_input for word in ["你好", "hi", "hello", "嗨"]):
         return "大家好呀~最近在忙新作品，看到你的消息很开心！❤️"
-    elif "忙" in user_input:
+    elif any(word in user_input for word in ["忙", "累", "辛苦"]):
         return "刚结束录音，虽然累但很充实！希望作品能带给大家惊喜✨"
+    elif any(word in user_input for word in ["喜欢", "爱", "支持"]):
+        return "谢谢你的支持！会继续努力不辜负大家的期待~我们一起成长吧！"
+    elif any(word in user_input for word in ["电影", "拍戏", "作品"]):
+        return "新电影正在筹备中，这次角色很有挑战性！期待和大家见面🎬"
     else:
         return "谢谢你的消息！保持微笑，一起加油吧~"
 # ======================
