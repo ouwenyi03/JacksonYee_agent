@@ -51,7 +51,7 @@ def get_celebrity_style():
     try:
         # 获取最新10条微博
         response = requests.get(rss_url, timeout=10)
-        soup = BeautifulSoup(response.content, 'xml')
+        soup = BeautifulSoup(response.content, 'xml', parser='lxml')
         items = soup.find_all('item')[:10]
 
         # 提取纯文本内容
